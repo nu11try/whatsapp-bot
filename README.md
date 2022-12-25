@@ -2,7 +2,7 @@
 ---
 
 1. Поставить python на ПК если его нет - https://www.python.org/downloads/
-2. Провести первичную настройку после установки python - https://vc.ru/dev/240211-nastroyka-rabochego-okruzheniya-na-windows-dlya-raboty-s-python
+2. Провести первичную настройку после установки python - https://pythonru.com/baza-znanij/skachat-i-ustanovit-python-na-windows-10
 3. В файл db.txt добавить номера в формате 'https://wa.me/{номер телефона}?text='
 4. В файл text.txt добавить желаемый текст рассылки
 
@@ -14,7 +14,7 @@
 
 Теперь можно запускать программу и следовать требованиям на экране
 
--- python main.py
+Запуск - python main.py или python3 main.py
 
 ## ВАЖНО!
 ---
