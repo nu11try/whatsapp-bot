@@ -1,6 +1,6 @@
-import datetime
 import os
 import random
+from datetime import datetime, timedelta, timezone
 
 import pywhatkit
 
@@ -36,27 +36,26 @@ def get_text_msg():
 
 def send_msg(phones_list, text_sms, every=True):
     for element in phones_list:
-        today = datetime.datetime.now()
-
-        hour = 0 if today.minute == 57 and today.hour == 23 else today.hour
-        minute = today.minute
-
         if every:
-            minute = minute + 2 if minute < 57 else 0
+            future_in_half_hour = datetime.now(timezone.utc) + timedelta(minutes=3)
         else:
-            minute = random.randint(minute, 57) if minute < 57 else random.randint(1, 3)
+            rand_minutes = random.randint(2, 3)
 
+            future_in_half_hour = datetime.now(timezone.utc) + timedelta(minutes=rand_minutes)
 
-        pywhatkit.sendwhatmsg(f"+{element}", text_sms, hour, minute, tab_close=True, close_time=3)
+        local_time = future_in_half_hour.astimezone()
+
+        pywhatkit.sendwhatmsg(f"+{element}", text_sms, local_time.time().hour,
+                              local_time.time().minute, tab_close=True, close_time=3)
 
 
 if __name__ == '__main__':
-    every_minute = input('Отправка каждые 3 минуты? (y - да/n - в случайное кол-во минут) ').lower()
+    every_minute = input('Отправка каждые 3 минуты? (y - да/n - случайное кол-во минут) ').lower()
 
     if every_minute not in ['y', 'n']:
         print('Введено неверное значение')
     else:
-        every_minute = True if every_minute.lower() == 'y' else False
+        buf = True if every_minute.lower() == 'y' else False
 
         phones = get_list_phone()
         text = get_text_msg()
@@ -64,4 +63,4 @@ if __name__ == '__main__':
         if text is None or phones is None:
             print('ERROR!')
         else:
-            send_msg(phones, 'Hi', every_minute)
+            send_msg(phones, text, buf)
