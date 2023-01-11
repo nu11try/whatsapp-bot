@@ -39,7 +39,7 @@ def send_msg(phones_list, text_sms, every=True):
         if every:
             future_in_half_hour = datetime.now(timezone.utc) + timedelta(minutes=3)
         else:
-            rand_minutes = random.randint(2, 3)
+            rand_minutes = random.randint(3, 10)
 
             future_in_half_hour = datetime.now(timezone.utc) + timedelta(minutes=rand_minutes)
 
