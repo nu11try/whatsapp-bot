@@ -1,15 +1,18 @@
-import os
 import random
 from datetime import datetime, timedelta, timezone
 
 import pywhatkit
+
+from config import Config
+
+config = Config()
 
 
 def get_list_phone():
     buf = None
 
     try:
-        with open(f'{os.getcwd()}/db.txt', mode='r', encoding='utf-8') as file:
+        with open(f'{config.root_path}/db.txt', mode='r', encoding='utf-8') as file:
             buf = file.readlines()
 
         index = 0
@@ -26,7 +29,7 @@ def get_text_msg():
     buf = None
 
     try:
-        with open(f'{os.getcwd()}/text.txt', mode='r', encoding='utf-8') as file:
+        with open(f'{config.root_path}/text.txt', mode='r', encoding='utf-8') as file:
             buf = file.read()
     except FileNotFoundError:
         print('Не найден файл с номерами! Проверьте, что есть файл text.txt в этой папке!')
@@ -34,14 +37,13 @@ def get_text_msg():
     return buf
 
 
-def send_msg(phones_list, text_sms, every=True):
-    for element in phones_list:
-        if every:
-            future_in_half_hour = datetime.now(timezone.utc) + timedelta(minutes=3)
-        else:
-            rand_minutes = random.randint(3, 10)
+def send_msg(phones_list, text_sms):
+    time_range = config.get_time_range()
 
-            future_in_half_hour = datetime.now(timezone.utc) + timedelta(minutes=rand_minutes)
+    for element in phones_list:
+        rand_minutes = random.randint(time_range['min'], time_range['max'])
+
+        future_in_half_hour = datetime.now(timezone.utc) + timedelta(minutes=rand_minutes)
 
         local_time = future_in_half_hour.astimezone()
 
@@ -50,17 +52,10 @@ def send_msg(phones_list, text_sms, every=True):
 
 
 if __name__ == '__main__':
-    every_minute = input('Отправка каждые 3 минуты? (y - да/n - случайное кол-во минут) ').lower()
+    phones = get_list_phone()
+    text = get_text_msg()
 
-    if every_minute not in ['y', 'n']:
-        print('Введено неверное значение')
+    if text is None or phones is None:
+        print('ERROR!')
     else:
-        buf = True if every_minute.lower() == 'y' else False
-
-        phones = get_list_phone()
-        text = get_text_msg()
-
-        if text is None or phones is None:
-            print('ERROR!')
-        else:
-            send_msg(phones, text, buf)
+        send_msg(phones, text)
