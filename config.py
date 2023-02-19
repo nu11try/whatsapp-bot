@@ -15,3 +15,6 @@ class Config:
             'min': self.__config_file['time_range']['min'],
             'max': self.__config_file['time_range']['max']
         }
+
+    def get_file_path(self):
+        return self.__config_file['file']

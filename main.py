@@ -50,6 +50,8 @@ def send_msg(phones_list, text_sms):
         pywhatkit.sendwhatmsg(f"+{element}", text_sms, local_time.time().hour,
                               local_time.time().minute, tab_close=True, close_time=3)
 
+        pywhatkit.sendwhats_image(img_path=config.get_file_path(), receiver=f"+{element}")
+
 
 if __name__ == '__main__':
     phones = get_list_phone()

@@ -1,6 +1,7 @@
 {
   "time_range": {
     "min": 1,
-    "max": 5
-  }
+    "max": 2
+  },
+  "file": ""
 }
